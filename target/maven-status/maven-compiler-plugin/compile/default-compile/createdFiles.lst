@@ -1,0 +1,15 @@
+com\rps\game\PlayerFactory.class
+com\rps\game\RulesEngine$1.class
+com\rps\game\Simulate.class
+com\rps\game\Player.class
+com\rps\game\GameResult.class
+com\rps\game\Move.class
+com\rps\game\Game.class
+com\rps\game\Play$ComputerMoveTask.class
+com\rps\game\RandomMoveStrategy.class
+com\rps\game\MoveStrategy.class
+com\rps\game\MoveType.class
+com\rps\game\RulesEngine.class
+com\rps\game\Play.class
+com\rps\game\ComputerPlayer.class
+com\rps\game\HumanPlayer.class

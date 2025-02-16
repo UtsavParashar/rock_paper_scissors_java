@@ -4,6 +4,7 @@ package com.rps.game;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.*;
 
 public class Play {
 
@@ -19,9 +20,10 @@ public class Play {
         players.add(humanPlayer);
         players.add(computerPlayer);
 
-        RulesEngine rulesEngine = new RulesEngine(); // Create a RulesEngine instance
-        Game game = new Game(players, rulesEngine); // Pass the rulesEngine to the Game constructor
+        RulesEngine rulesEngine = new RulesEngine();
 
+        // ExecutorService for parallel move generation
+        ExecutorService executor = Executors.newFixedThreadPool(2);
 
         // Get number of rounds from user
         int numRounds = getNumberOfRounds(scanner);
@@ -36,20 +38,34 @@ public class Play {
             round++;
             System.out.println("\nRound " + round + " of " + numRounds);
 
+            // Submit the computer's move calculation to a separate thread
+            Future<Move> computerMoveFuture = executor.submit(new ComputerMoveTask((ComputerPlayer) computerPlayer));
+
             // Get human player's move
             Move humanMove = getHumanMove(scanner, humanPlayer);
             if (humanMove == null) {
+                executor.shutdownNow();
+                try {
+                    executor.awaitTermination(1, TimeUnit.SECONDS);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
                 break; // Exit if user chooses to exit
             }
 
-            // Get computer player's move
-            Move computerMove = computerPlayer.getMove();
+            // Get the computer's move (wait for it to finish)
+            Move computerMove = null;
+            try {
+                computerMove = computerMoveFuture.get();
+            } catch (InterruptedException | ExecutionException e) {
+                System.err.println("Error getting computer move: " + e.getMessage());
+                break; // Exit if there's an error
+            }
 
             System.out.println(humanMove);
             System.out.println(computerMove);
 
             GameResult result = rulesEngine.determineWinner(humanMove, computerMove);
-
 
             if (result.winner() == humanPlayer) {
                 System.out.println(result.message());
@@ -63,14 +79,32 @@ public class Play {
             }
         }
 
+        // Determine overall winner
+        String overallWinnerMessage;
+        if (humanWins > computerWins) {
+            overallWinnerMessage = "You are the overall winner!";
+        } else if (computerWins > humanWins) {
+            overallWinnerMessage = "The computer is the overall winner!";
+        } else {
+            overallWinnerMessage = "It's an overall tie!";
+        }
+
         // Final score
         System.out.println("\n--- Final Score ---");
         System.out.println("Rounds Played: " + round);
         System.out.println("Your Wins: " + humanWins);
         System.out.println("Computer Wins: " + computerWins);
         System.out.println("Ties: " + ties);
+        System.out.println("\n" + overallWinnerMessage);  // Display overall winner
 
         System.out.println("\nThanks for playing!");
+
+        executor.shutdown();
+        try {
+            executor.awaitTermination(1, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
         scanner.close();
     }
 
@@ -114,6 +148,20 @@ public class Play {
                     System.out.println("Invalid input. Please enter 1, 2, 3, or 0.");
                 }
             }
+        }
+    }
+
+    // ComputerMoveTask definition (inner class)
+    static class ComputerMoveTask implements Callable<Move> {
+        private final ComputerPlayer computerPlayer;
+
+        public ComputerMoveTask(ComputerPlayer computerPlayer) {
+            this.computerPlayer = computerPlayer;
+        }
+
+        @Override
+        public Move call() throws Exception {
+            return computerPlayer.getMove();
         }
     }
 }
