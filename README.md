@@ -40,7 +40,6 @@ The application is designed with a modular architecture to promote maintainabili
 
 The project includes a suite of unit tests that cover critical components and functionalities. Each module has corresponding tests that validate its behavior, ensuring code reliability and reducing the likelihood of bugs.
 
-
 ## Dependencies
 
 *   **JUnit 5:** Used for writing and running unit tests.
