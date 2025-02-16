@@ -47,7 +47,7 @@ The project follows TDD principles, with comprehensive unit tests for each compo
 
 ## Setup Instructions
 
-1.  **Navigate to the project directory:** `cd rock-paper-scissors`
+1.  **Navigate to the project directory:** `cd rock_paper_scissors_java`
 2.  **Build the project using Maven:** `mvn clean install`
 3.  **Run the game:** `mvn exec:java -Dexec.mainClass="com.rps.game.Play"`
 
