@@ -1,7 +1,7 @@
 # Rock Paper Scissors Game
 
-A production-level Python implementation of the Rock-Paper-Scissors game for an human to play against Computer which choose its moves randomly. 
-For better user engagement Computer could follow strategies like Markov, Reinforcement learning and Game Theory. I have used few of these strategies in my attached Rock Paper Scissors Python model.
+A production-level Java implementation of the Rock-Paper-Scissors game for an human to play against Computer which choose its moves randomly. 
+For better user engagement Computer could follow strategies like Markov, Reinforcement learning and Game Theory. I have used few of these strategies in my attached Rock Paper Scissors Python project.
 
 ## Features and Business Logic
 
@@ -36,9 +36,10 @@ The application is designed with a modular architecture to promote maintainabili
 *   **Strategy Pattern:** The `MoveStrategy` interface and its implementations (`RandomMoveStrategy`) exemplify the Strategy pattern, allowing for different Computer player behaviors to be easily swapped.
 *   **Factory Pattern:** The `PlayerFactory` class implements the Factory pattern, centralizing the creation of `Player` objects and decoupling the client code from the concrete player classes.
 
-### Test-Driven Development (TDD)
+### Comprehensive Unit Testing
 
-The project follows TDD principles, with comprehensive unit tests for each component to ensure code quality and prevent regressions.
+The project includes a suite of unit tests that cover critical components and functionalities. Each module has corresponding tests that validate its behavior, ensuring code reliability and reducing the likelihood of bugs.
+
 
 ## Dependencies
 
